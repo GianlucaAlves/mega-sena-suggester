@@ -170,15 +170,16 @@ function Cartela() {
         style={{
           width: "100%",
           overflowX: "auto",
-          paddingBottom: 6,
+          overflowY: "hidden",
+          paddingBottom: 4,
         }}
       >
         <div
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 14,
-            minWidth: 620,
+            gap: 12,
+            width: "100%",
           }}
         >
           {LINHAS.map((linha, index) => (
@@ -186,8 +187,9 @@ function Cartela() {
               key={`linha-${index}`}
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(10, minmax(48px, 1fr))",
-                gap: 10,
+                gridTemplateColumns: "repeat(10, minmax(0, 1fr))",
+                gap: "clamp(6px, 1vw, 10px)",
+                alignItems: "stretch",
               }}
             >
               {linha.map((num) => {
@@ -200,8 +202,15 @@ function Cartela() {
                     style={{
                       aspectRatio: "1 / 1",
                       width: "100%",
-                      minHeight: 48,
-                      borderRadius: 16,
+                      minHeight: "clamp(32px, 4vw, 48px)",
+                      padding: 0,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      lineHeight: 1.1,
+                      textAlign: "center",
+                      boxSizing: "border-box",
+                      borderRadius: "clamp(10px, 1.5vw, 16px)",
                       border: selecionado
                         ? `2px solid ${COLORS.branco}`
                         : `1px solid ${COLORS.borda}`,
@@ -210,7 +219,7 @@ function Cartela() {
                         : "rgba(255,255,255,0.05)",
                       color: COLORS.branco,
                       fontWeight: 800,
-                      fontSize: 16,
+                      fontSize: "clamp(0.72rem, 1.15vw, 0.98rem)",
                       cursor: "pointer",
                       transition:
                         "transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease",
