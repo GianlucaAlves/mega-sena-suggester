@@ -196,7 +196,7 @@ function Roleta() {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 380px), 1fr))",
         gap: 20,
         alignItems: "start",
         fontFamily: FONT_FAMILY,
@@ -205,6 +205,8 @@ function Roleta() {
       <section
         style={{
           width: "100%",
+          minWidth: 0,
+          boxSizing: "border-box",
           backgroundColor: COLORS.painel,
           border: `1px solid ${COLORS.borda}`,
           borderRadius: 28,
@@ -219,7 +221,7 @@ function Roleta() {
           style={{
             width: "100%",
             maxWidth: circleSize,
-            height: circleSize,
+            aspectRatio: "1 / 1",
             borderRadius: "50%",
             background: "rgba(255,255,255,0.06)",
             border: `3px solid ${COLORS.azul}`,
@@ -271,6 +273,8 @@ function Roleta() {
       <section
         style={{
           width: "100%",
+          minWidth: 0,
+          boxSizing: "border-box",
           backgroundColor: COLORS.painel,
           border: `1px solid ${COLORS.borda}`,
           borderRadius: 28,
