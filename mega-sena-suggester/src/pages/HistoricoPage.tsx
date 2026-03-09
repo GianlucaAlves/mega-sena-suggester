@@ -21,7 +21,7 @@ function HistoricoPage(){
         const comparador = new Set<number>(numerosEditados);
 
         
-        if(comparador.size == numerosEditados.length && numerosValidos){
+        if (comparador.size === numerosEditados.length && numerosValidos) {
             contexto.editarPalpite(id, { numeros: numerosEditados });
             setPalpiteEditando(null);
         }else{
@@ -61,8 +61,8 @@ function HistoricoPage(){
                         </>
                     ) : (
                         <>
-                            {palpite.numeros.map((numero) =>(
-                                <Ball num={numero} key={numero} />
+                            {palpite.numeros.map((numero, i) =>(
+                                <Ball num={numero} key={`${palpite.id}-${numero}-${i}`} />
                             ))}
                             <button onClick={() => editar(palpite.id, palpite.numeros)}>Editar</button>
                             <button onClick={() => excluir(palpite.id)}>Excluir</button>

@@ -9,7 +9,7 @@ function Cartela(){
 
     const handlerClique = (num:number) => {
         if(numeroSelecionado.includes(num)){
-            setNumeroSelecionado(numeroSelecionado.filter(n => n!== num))
+            setNumeroSelecionado(numeroSelecionado.filter(n => n !== num))
         }else{
             if(numeroSelecionado.length < 6){
                 setNumeroSelecionado([...numeroSelecionado, num]);
@@ -27,6 +27,7 @@ function Cartela(){
             data: new Date().toISOString()
         }
         contexto.adicionarPalpite(novoPalpite);
+        setNumeroSelecionado([]);
     }
 
     return(
@@ -37,11 +38,9 @@ function Cartela(){
                 onClick={() => handlerClique(num)}>{num}
                 </button>)}
                 </div>
-                {numeroSelecionado.length == 6 ?
-                <>
-                <button onClick={() => salvarSelecao(numeroSelecionado)}>Salvar seleção</button>
-                </> :
-                <></>}
+                {numeroSelecionado.length === 6 && (
+                    <button onClick={() => salvarSelecao(numeroSelecionado)}>Salvar seleção</button>
+                )}
             </div>
 
     )
