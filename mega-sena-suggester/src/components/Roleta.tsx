@@ -2,6 +2,19 @@ import { useEffect, useRef, useState, useContext } from "react";
 import Ball from "./Ball";
 import { PalpitesContext } from "../context/PalpitesContext";
 
+const COLORS = {
+  laranja: "#E36302",
+  verde: "#028867",
+  azul: "#3412E5",
+  branco: "#FFFFFF",
+  preto: "#000000",
+  painel: "rgba(255,255,255,0.04)",
+  borda: "rgba(255,255,255,0.10)",
+  textoSecundario: "rgba(255,255,255,0.72)",
+};
+
+const FONT_FAMILY = 'Inter, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif';
+
 type Bola = {
   x: number;
   y: number;
@@ -149,87 +162,140 @@ function Roleta() {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <div
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+        gap: 20,
+        alignItems: "start",
+        fontFamily: FONT_FAMILY,
+      }}
+    >
+      <section
         style={{
-          width: CIRCLE_SIZE,
-          height: CIRCLE_SIZE,
-          borderRadius: "50%",
-          background: "#eee",
-          position: "relative",
-          overflow: "hidden",
-          marginBottom: 24,
+          backgroundColor: COLORS.painel,
+          border: `1px solid ${COLORS.borda}`,
+          borderRadius: 28,
+          padding: 24,
+          boxShadow: "0 20px 48px rgba(0,0,0,0.28)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
         }}
       >
-        {bolas.map((bola) => (
-          <Ball
-            key={bola.num}
-            num={bola.num}
-            style={{
-              position: "absolute",
-              left: bola.x - BALL_SIZE / 2,
-              top: bola.y - BALL_SIZE / 2,
-              width: BALL_SIZE,
-              height: BALL_SIZE,
-              fontSize: 14,
-              pointerEvents: "none",
-              transition: "none",
-            }}
-          />
-        ))}
-      </div>
-      <button
-        onClick={handleSortear}
-        disabled={girando}
+        <div
+          style={{
+            width: CIRCLE_SIZE,
+            height: CIRCLE_SIZE,
+            borderRadius: "50%",
+            background: "rgba(255,255,255,0.06)",
+            border: `3px solid ${COLORS.azul}`,
+            position: "relative",
+            overflow: "hidden",
+            marginBottom: 24,
+            boxShadow: "inset 0 0 40px rgba(0,0,0,0.35)",
+          }}
+        >
+          {bolas.map((bola) => (
+            <Ball
+              key={bola.num}
+              num={bola.num}
+              style={{
+                position: "absolute",
+                left: bola.x - BALL_SIZE / 2,
+                top: bola.y - BALL_SIZE / 2,
+                width: BALL_SIZE,
+                height: BALL_SIZE,
+                fontSize: 14,
+                pointerEvents: "none",
+                transition: "none",
+                backgroundColor: COLORS.verde,
+                color: COLORS.branco,
+                border: `1px solid ${COLORS.branco}`,
+              }}
+            />
+          ))}
+        </div>
+        <button
+          onClick={handleSortear}
+          disabled={girando}
+          style={{
+            padding: "12px 24px",
+            fontSize: 16,
+            fontWeight: 800,
+            borderRadius: 14,
+            border: "none",
+            backgroundColor: girando ? COLORS.laranja : COLORS.verde,
+            color: COLORS.branco,
+            cursor: girando ? "not-allowed" : "pointer",
+            fontFamily: FONT_FAMILY,
+          }}
+        >
+          {girando ? "Sorteando..." : "Iniciar sorteio"}
+        </button>
+      </section>
+
+      <section
         style={{
-          padding: "8px 24px",
-          fontSize: 18,
-          borderRadius: 8,
-          border: "none",
-          background: girando ? "#c33" : "#3c3",
-          color: "#fff",
-          cursor: girando ? "not-allowed" : "pointer",
+          backgroundColor: COLORS.painel,
+          border: `1px solid ${COLORS.borda}`,
+          borderRadius: 28,
+          padding: 24,
+          boxShadow: "0 20px 48px rgba(0,0,0,0.28)",
+          display: "flex",
+          flexDirection: "column",
+          gap: 20,
         }}
       >
-        Sortear
-      </button>
-      <div style={{ marginTop: 24, display: "flex", gap: 16, justifyContent: "center" }}>
-        {sorteadas.map((num) => (
-          <Ball
-            key={`sorteada-${num}`}
-            num={num}
-            style={{
-              width: 48,
-              height: 48,
-              fontSize: 24,
-              background: "#FFD700",
-              color: "#222",
-              border: "3px solid #222",
-              boxShadow: "0 2px 8px #0004",
-            }}
-          />
-        ))}
-      </div>
-      <div style={{ marginTop: 32, width: 360 }}>
-        {historicoSorteios.map((s, idx) => (
-          <div
-            key={idx}
-            style={{
-              marginBottom: 16,
-              padding: 12,
-              border: "1px solid #ccc",
-              borderRadius: 8,
-              background: "#fafafa",
-            }}
-          >
-            <div>
-              <strong>Sorteio {idx + 1}:</strong>{" "}
-              {s.numeros.join(", ")}
+        <div>
+          <span style={{ color: COLORS.textoSecundario, fontSize: 12, textTransform: "uppercase", letterSpacing: 1.4 }}>
+            Resultado atual
+          </span>
+          <h2 style={{ margin: "8px 0 0", color: COLORS.branco, fontSize: 28, fontWeight: 900 }}>
+            Dezenas sorteadas
+          </h2>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 52px)", justifyContent: "start", gap: 12 }}>
+          {sorteadas.map((num) => (
+            <Ball
+              key={`sorteada-${num}`}
+              num={num}
+              style={{
+                width: 52,
+                height: 52,
+                fontSize: 20,
+                backgroundColor: COLORS.laranja,
+                color: COLORS.branco,
+                border: `2px solid ${COLORS.branco}`,
+                boxShadow: "0 10px 18px rgba(0,0,0,0.28)",
+              }}
+            />
+          ))}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {historicoSorteios.map((s, idx) => (
+            <div
+              key={idx}
+              style={{
+                padding: 16,
+                border: `1px solid ${COLORS.borda}`,
+                borderRadius: 18,
+                backgroundColor: "rgba(0,0,0,0.22)",
+              }}
+            >
+              <div style={{ color: COLORS.branco, fontWeight: 800, marginBottom: 8 }}>
+                Sorteio {idx + 1}
+              </div>
+              <div style={{ color: COLORS.textoSecundario, marginBottom: 8 }}>
+                {s.numeros.map((numero) => String(numero).padStart(2, "0")).join(", ")}
+              </div>
+              <div style={{ color: COLORS.branco }}>{s.resultado}</div>
             </div>
-            <div style={{ marginTop: 4 }}>{s.resultado}</div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

@@ -14,11 +14,14 @@ function Ball(props: BallProps){
             height: "40px",
             width: "40px",
             margin: "3px",
+            color: "#ffffff",
             backgroundColor: "#028867",
             ...props.style
         }}>
             <p style={{
-                color: "#ffffff"
+                color: "inherit",
+                margin: 0,
+                fontWeight: 700
             }}>{props.num}</p>
         </div>
     )
