@@ -4,6 +4,10 @@ import Ball from '../components/Ball';
 
 function HistoricoPage(){
     const contexto = useContext(PalpitesContext)
+
+    const excluir = (id: string) => {
+        contexto.excluirPalpite(id);
+    }
     return(
         <div>
             <h1>Página do histórico</h1>
@@ -12,9 +16,12 @@ function HistoricoPage(){
                 <li key={index} style = {{
                     display: "flex"
                 }}>
-                    {palpite.map((numero) =>(
+                    {palpite.numeros.map((numero) =>(
                         <Ball num={numero} />
                     ))}
+
+                    <button>Editar</button>
+                    <button onClick={() => excluir(palpite.id)}>Excluir</button>
                     </li>
                 ))}
             </ul>           

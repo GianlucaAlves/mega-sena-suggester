@@ -1,14 +1,18 @@
 import {useContext, useEffect, useState} from 'react'
 import {PalpitesContext} from '../context/PalpitesContext';
-
+import type {Palpite} from '../types/Palpite'
 
 
 function PalpitePage(){
     const contexto = useContext(PalpitesContext);
-    const [palpite, setPalpite] = useState<number[]>([]);
+    const [palpite, setPalpite] = useState<Palpite | null>(null);
 
     function gerarPalpite(){
         const num = new Set<number>();
+        const id = Date.now().toString();
+        const tipo = 'automatico';
+        const data = new Date().toISOString();
+        
         let count = 0;
         while(count < 6){
             let tam = num.size;
@@ -18,16 +22,24 @@ function PalpitePage(){
                 tam = num.size;
             }
         }
+
         let palpiteGerado = Array.from(num);
-        setPalpite(palpiteGerado)
-        contexto.adicionarPalpite(palpiteGerado);
+        const novoPalpite: Palpite = {
+            id,
+            numeros: palpiteGerado,
+            tipo,
+            data,
+        };
+
+        setPalpite(novoPalpite)
+        contexto.adicionarPalpite(novoPalpite);
     }
     useEffect(() => {
     gerarPalpite();
     }, []);
     return (
         <>
-            <div>{palpite.join(', ')}</div>
+            <div>{palpite?.numeros.join(', ')}</div>
             <button onClick={gerarPalpite}>Nova sugestão</button>
         </>
     );
