@@ -13,7 +13,8 @@ const COLORS = {
   textoSecundario: "rgba(255,255,255,0.72)",
 };
 
-const FONT_FAMILY = 'Inter, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif';
+const FONT_FAMILY =
+  'Inter, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif';
 
 type Bola = {
   x: number;
@@ -64,7 +65,7 @@ function Roleta() {
       const { x, y } = getRandomPosition();
       const { vx, vy } = getRandomVelocity();
       return { x, y, vx, vy, num: i + 1 };
-    })
+    }),
   );
   const [girando, setGirando] = useState(false);
   const [sorteadas, setSorteadas] = useState<number[]>([]);
@@ -96,7 +97,7 @@ function Roleta() {
             ny = CENTER + nyWall * RADIUS;
           }
           return { x: nx, y: ny, vx, vy, num };
-        })
+        }),
       );
       animationRef.current = requestAnimationFrame(animar);
     }
@@ -155,7 +156,7 @@ function Roleta() {
         const { x, y } = getRandomPosition();
         const { vx, vy } = getRandomVelocity();
         return { x, y, vx, vy, num: i + 1 };
-      })
+      }),
     );
     setSorteadas([]);
     setGirando(true);
@@ -248,15 +249,36 @@ function Roleta() {
         }}
       >
         <div>
-          <span style={{ color: COLORS.textoSecundario, fontSize: 12, textTransform: "uppercase", letterSpacing: 1.4 }}>
+          <span
+            style={{
+              color: COLORS.textoSecundario,
+              fontSize: 12,
+              textTransform: "uppercase",
+              letterSpacing: 1.4,
+            }}
+          >
             Resultado atual
           </span>
-          <h2 style={{ margin: "8px 0 0", color: COLORS.branco, fontSize: 28, fontWeight: 900 }}>
+          <h2
+            style={{
+              margin: "8px 0 0",
+              color: COLORS.branco,
+              fontSize: 28,
+              fontWeight: 900,
+            }}
+          >
             Dezenas sorteadas
           </h2>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 52px)", justifyContent: "start", gap: 12 }}>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(3, 52px)",
+            justifyContent: "start",
+            gap: 12,
+          }}
+        >
           {sorteadas.map((num) => (
             <Ball
               key={`sorteada-${num}`}
@@ -285,11 +307,19 @@ function Roleta() {
                 backgroundColor: "rgba(0,0,0,0.22)",
               }}
             >
-              <div style={{ color: COLORS.branco, fontWeight: 800, marginBottom: 8 }}>
+              <div
+                style={{
+                  color: COLORS.branco,
+                  fontWeight: 800,
+                  marginBottom: 8,
+                }}
+              >
                 Sorteio {idx + 1}
               </div>
               <div style={{ color: COLORS.textoSecundario, marginBottom: 8 }}>
-                {s.numeros.map((numero) => String(numero).padStart(2, "0")).join(", ")}
+                {s.numeros
+                  .map((numero) => String(numero).padStart(2, "0"))
+                  .join(", ")}
               </div>
               <div style={{ color: COLORS.branco }}>{s.resultado}</div>
             </div>

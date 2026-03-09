@@ -1,9 +1,9 @@
-import {Routes, Route} from 'react-router-dom';
-import HomePage from './pages/HomePage';
-import HistoricoPage from './pages/HistoricoPage';
-import PalpitePage from './pages/PalpitePage';
-import SorteioPage from './pages/SorteioPage';
-import Header from './components/Header';
+import { Routes, Route } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import HistoricoPage from "./pages/HistoricoPage";
+import PalpitePage from "./pages/PalpitePage";
+import SorteioPage from "./pages/SorteioPage";
+import Header from "./components/Header";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <Header />
       <main style={{ paddingTop: 94 }}>
         <Routes>
-          <Route path="/" element={<HomePage/>} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/palpite" element={<PalpitePage />} />
           <Route path="/historico" element={<HistoricoPage />} />
           <Route path="/sorteio" element={<SorteioPage />} />
@@ -21,4 +21,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

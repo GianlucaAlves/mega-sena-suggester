@@ -10,7 +10,8 @@ const COLORS = {
   fundo: "rgba(5,5,5,0.88)",
 };
 
-const FONT_FAMILY = 'Inter, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif';
+const FONT_FAMILY =
+  'Inter, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif';
 
 const baseLinkStyle: CSSProperties = {
   color: COLORS.branco,
@@ -20,7 +21,8 @@ const baseLinkStyle: CSSProperties = {
   letterSpacing: 0.3,
   padding: "10px 14px",
   borderRadius: 999,
-  transition: "background-color 0.2s ease, transform 0.2s ease, color 0.2s ease",
+  transition:
+    "background-color 0.2s ease, transform 0.2s ease, color 0.2s ease",
 };
 
 function Header() {
@@ -85,8 +87,17 @@ function Header() {
             }}
           />
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <strong style={{ fontSize: 18, fontWeight: 900 }}>Mega Suggester</strong>
-            <span style={{ fontSize: 11, opacity: 0.7, letterSpacing: 1.2, textTransform: "uppercase" }}>
+            <strong style={{ fontSize: 18, fontWeight: 900 }}>
+              Mega Suggester
+            </strong>
+            <span
+              style={{
+                fontSize: 11,
+                opacity: 0.7,
+                letterSpacing: 1.2,
+                textTransform: "uppercase",
+              }}
+            >
               painel de palpites
             </span>
           </div>
@@ -110,11 +121,14 @@ function Header() {
                 style={{
                   ...baseLinkStyle,
                   backgroundColor: isActive ? COLORS.azul : "transparent",
-                  border: isActive ? `1px solid ${COLORS.azul}` : `1px solid transparent`,
+                  border: isActive
+                    ? `1px solid ${COLORS.azul}`
+                    : `1px solid transparent`,
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = "rgba(255,255,255,0.06)";
+                    e.currentTarget.style.backgroundColor =
+                      "rgba(255,255,255,0.06)";
                   }
                   e.currentTarget.style.transform = "translateY(-1px)";
                 }}
