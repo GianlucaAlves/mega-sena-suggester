@@ -119,8 +119,8 @@ function PalpitePage() {
               maxWidth: 760,
             }}
           >
-            Aqui você pode escolher: pedir uma sugestão aleatória ou
-            selecionar manualmente 6 dezenas na nossa cartela.
+            Aqui você pode escolher: pedir uma sugestão aleatória ou selecionar
+            manualmente 6 dezenas na nossa cartela.
           </p>
         </section>
 

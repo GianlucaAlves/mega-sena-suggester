@@ -30,10 +30,15 @@ type Sorteio = {
 };
 
 const TOTAL = 60;
-const CIRCLE_SIZE = 300;
-const BALL_SIZE = 24;
-const RADIUS = (CIRCLE_SIZE - BALL_SIZE) / 2;
-const CENTER = CIRCLE_SIZE / 2;
+const DEFAULT_CIRCLE_SIZE = 300;
+
+function getCircleSize() {
+  if (typeof window === "undefined") {
+    return DEFAULT_CIRCLE_SIZE;
+  }
+
+  return Math.max(220, Math.min(300, window.innerWidth - 72));
+}
 
 function getRandomVelocity() {
   const angle = Math.random() * 2 * Math.PI;
@@ -41,13 +46,26 @@ function getRandomVelocity() {
   return { vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed };
 }
 
-function getRandomPosition() {
+function getRandomPosition(circleSize: number, ballSize: number) {
+  const radius = (circleSize - ballSize) / 2;
+  const center = circleSize / 2;
   let angle = Math.random() * 2 * Math.PI;
-  let r = Math.random() * RADIUS * 0.8;
+  let r = Math.random() * radius * 0.8;
   return {
-    x: CENTER + r * Math.cos(angle),
-    y: CENTER + r * Math.sin(angle),
+    x: center + r * Math.cos(angle),
+    y: center + r * Math.sin(angle),
   };
+}
+
+function createBolas(circleSize: number): Bola[] {
+  const ballSize = Math.max(18, Math.min(24, circleSize * 0.08));
+
+  return Array.from({ length: TOTAL }, (_, i) => {
+    const { x, y } = getRandomPosition(circleSize, ballSize);
+    const { vx, vy } = getRandomVelocity();
+
+    return { x, y, vx, vy, num: i + 1 };
+  });
 }
 
 function compararPalpite(palpite: number[], sorteio: number[]) {
@@ -60,13 +78,11 @@ function compararPalpite(palpite: number[], sorteio: number[]) {
 
 function Roleta() {
   const contexto = useContext(PalpitesContext);
-  const [bolas, setBolas] = useState<Bola[]>(() =>
-    Array.from({ length: TOTAL }, (_, i) => {
-      const { x, y } = getRandomPosition();
-      const { vx, vy } = getRandomVelocity();
-      return { x, y, vx, vy, num: i + 1 };
-    }),
-  );
+  const [circleSize, setCircleSize] = useState<number>(getCircleSize);
+  const ballSize = Math.max(18, Math.min(24, circleSize * 0.08));
+  const radius = (circleSize - ballSize) / 2;
+  const center = circleSize / 2;
+  const [bolas, setBolas] = useState<Bola[]>(() => createBolas(getCircleSize()));
   const [girando, setGirando] = useState(false);
   const [sorteadas, setSorteadas] = useState<number[]>([]);
   const [historicoSorteios, setHistoricoSorteios] = useState<Sorteio[]>(() => {
@@ -77,6 +93,24 @@ function Roleta() {
   const sorteioTimeout = useRef<number | null>(null);
 
   useEffect(() => {
+    function handleResize() {
+      setCircleSize(getCircleSize());
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!girando) {
+      setBolas(createBolas(circleSize));
+    }
+  }, [circleSize, girando]);
+
+  useEffect(() => {
     if (!girando) return;
     function animar() {
       setBolas((bolasAntigas) =>
@@ -84,17 +118,17 @@ function Roleta() {
           let { x, y, vx, vy, num } = bola;
           let nx = x + vx;
           let ny = y + vy;
-          const dx = nx - CENTER;
-          const dy = ny - CENTER;
+          const dx = nx - center;
+          const dy = ny - center;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist > RADIUS) {
+          if (dist > radius) {
             const nxWall = dx / dist;
             const nyWall = dy / dist;
             const dot = vx * nxWall + vy * nyWall;
             vx = vx - 2 * dot * nxWall;
             vy = vy - 2 * dot * nyWall;
-            nx = CENTER + nxWall * RADIUS;
-            ny = CENTER + nyWall * RADIUS;
+            nx = center + nxWall * radius;
+            ny = center + nyWall * radius;
           }
           return { x: nx, y: ny, vx, vy, num };
         }),
@@ -105,7 +139,7 @@ function Roleta() {
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
-  }, [girando]);
+  }, [girando, center, radius]);
 
   useEffect(() => {
     if (girando && sorteadas.length < 6) {
@@ -151,13 +185,7 @@ function Roleta() {
 
   function handleSortear() {
     if (girando) return;
-    setBolas(
-      Array.from({ length: TOTAL }, (_, i) => {
-        const { x, y } = getRandomPosition();
-        const { vx, vy } = getRandomVelocity();
-        return { x, y, vx, vy, num: i + 1 };
-      }),
-    );
+    setBolas(createBolas(circleSize));
     setSorteadas([]);
     setGirando(true);
   }
@@ -166,8 +194,7 @@ function Roleta() {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns:
-          "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
+        gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))",
         gap: 20,
         alignItems: "start",
         fontFamily: FONT_FAMILY,
@@ -189,8 +216,8 @@ function Roleta() {
         <div
           style={{
             width: "100%",
-            maxWidth: CIRCLE_SIZE,
-            height: CIRCLE_SIZE,
+            maxWidth: circleSize,
+            height: circleSize,
             borderRadius: "50%",
             background: "rgba(255,255,255,0.06)",
             border: `3px solid ${COLORS.azul}`,
@@ -206,11 +233,11 @@ function Roleta() {
               num={bola.num}
               style={{
                 position: "absolute",
-                left: bola.x - BALL_SIZE / 2,
-                top: bola.y - BALL_SIZE / 2,
-                width: BALL_SIZE,
-                height: BALL_SIZE,
-                fontSize: 14,
+                left: bola.x - ballSize / 2,
+                top: bola.y - ballSize / 2,
+                width: ballSize,
+                height: ballSize,
+                fontSize: Math.max(11, ballSize * 0.55),
                 pointerEvents: "none",
                 transition: "none",
                 backgroundColor: COLORS.verde,
@@ -288,9 +315,9 @@ function Roleta() {
               key={`sorteada-${num}`}
               num={num}
               style={{
-                width: 52,
-                height: 52,
-                fontSize: 20,
+                width: 50,
+                height: 50,
+                fontSize: 18,
                 backgroundColor: COLORS.laranja,
                 color: COLORS.branco,
                 border: `2px solid ${COLORS.branco}`,
