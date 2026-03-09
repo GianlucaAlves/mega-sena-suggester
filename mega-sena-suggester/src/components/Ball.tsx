@@ -1,9 +1,12 @@
+import { memo } from "react";
+import type { CSSProperties } from "react";
+
 type BallProps = {
   num: number;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 };
 
-function Ball(props: BallProps) {
+function Ball({ num, style }: BallProps) {
   return (
     <div
       style={{
@@ -17,7 +20,7 @@ function Ball(props: BallProps) {
         margin: "3px",
         color: "#ffffff",
         backgroundColor: "#028867",
-        ...props.style,
+        ...style,
       }}
     >
       <p
@@ -27,10 +30,10 @@ function Ball(props: BallProps) {
           fontWeight: 700,
         }}
       >
-        {props.num}
+        {num}
       </p>
     </div>
   );
 }
 
-export default Ball;
+export default memo(Ball);

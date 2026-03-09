@@ -59,7 +59,7 @@ function HomePage() {
               marginBottom: 18,
             }}
           >
-            Projeto de portfólio
+            Mega Palpites
           </div>
 
           <h1
@@ -72,8 +72,7 @@ function HomePage() {
               maxWidth: 760,
             }}
           >
-            Monte, salve e acompanhe seus palpites em uma experiência com cara
-            de produto real.
+            Crie ou gere seus palpites e depois os teste em um sorteio estilo mega sena.
           </h1>
 
           <p
@@ -85,8 +84,7 @@ function HomePage() {
               maxWidth: 760,
             }}
           >
-            Gere apostas automáticas, monte sua cartela manualmente e consulte o
-            histórico em um painel escuro, moderno e inspirado na Mega-Sena.
+            Aqui você pode testar sua sorte sem gastar um real.
           </p>
 
           <div

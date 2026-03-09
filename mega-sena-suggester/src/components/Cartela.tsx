@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { PalpitesContext } from "../context/PalpitesContext";
 import type { Palpite } from "../types/Palpite";
 import { v4 as uuidv4 } from "uuid";
@@ -17,49 +17,61 @@ const COLORS = {
 const FONT_FAMILY =
   'Inter, "SF Pro Display", "Segoe UI", "Helvetica Neue", Arial, sans-serif';
 
+const NUMEROS = Array.from({ length: 60 }, (_, i) => i + 1);
+const LINHAS = Array.from({ length: 6 }, (_, linhaIndex) =>
+  NUMEROS.slice(linhaIndex * 10, linhaIndex * 10 + 10),
+);
+
 function formatNumber(num: number) {
   return String(num).padStart(2, "0");
 }
 
 function Cartela() {
   const [numeroSelecionado, setNumeroSelecionado] = useState<number[]>([]);
-  const numeros = Array.from({ length: 60 }, (_, i) => i + 1);
   const contexto = useContext(PalpitesContext);
 
-  const linhas = useMemo(() => {
-    return Array.from({ length: 6 }, (_, linhaIndex) =>
-      numeros.slice(linhaIndex * 10, linhaIndex * 10 + 10),
-    );
-  }, [numeros]);
+  const selecionadosOrdenados = useMemo(
+    () => [...numeroSelecionado].sort((a, b) => a - b),
+    [numeroSelecionado],
+  );
 
-  const handlerClique = (num: number) => {
-    if (numeroSelecionado.includes(num)) {
-      setNumeroSelecionado(numeroSelecionado.filter((n) => n !== num));
-    } else if (numeroSelecionado.length < 6) {
-      setNumeroSelecionado([...numeroSelecionado, num]);
-    } else {
+  const handlerClique = useCallback((num: number) => {
+    setNumeroSelecionado((atual) => {
+      if (atual.includes(num)) {
+        return atual.filter((n) => n !== num);
+      }
+
+      if (atual.length < 6) {
+        return [...atual, num];
+      }
+
       alert("Você só pode selecionar 6 números!");
-    }
-  };
+      return atual;
+    });
+  }, []);
 
-  const salvarSelecao = (selecionados: number[]) => {
-    const novoPalpite: Palpite = {
-      id: uuidv4(),
-      tipo: "manual",
-      numeros: [...selecionados].sort((a, b) => a - b),
-      data: new Date().toISOString(),
-    };
-    contexto.adicionarPalpite(novoPalpite);
-    setNumeroSelecionado([]);
-  };
+  const salvarSelecao = useCallback(
+    (selecionados: number[]) => {
+      const novoPalpite: Palpite = {
+        id: uuidv4(),
+        tipo: "manual",
+        numeros: [...selecionados].sort((a, b) => a - b),
+        data: new Date().toISOString(),
+      };
+      contexto.adicionarPalpite(novoPalpite);
+      setNumeroSelecionado([]);
+    },
+    [contexto],
+  );
 
   return (
     <section
       style={{
+        width: "100%",
         backgroundColor: COLORS.painel,
         border: `1px solid ${COLORS.borda}`,
         borderRadius: 28,
-        padding: "28px 22px",
+        padding: "clamp(18px, 4vw, 28px) clamp(14px, 3vw, 22px)",
         boxShadow: "0 24px 60px rgba(0,0,0,0.28)",
         backdropFilter: "blur(12px)",
         fontFamily: FONT_FAMILY,
@@ -92,13 +104,12 @@ function Cartela() {
             fontWeight: 900,
           }}
         >
-          Volante da Mega-Sena
+          Cartela da Mega-Sena
         </h2>
         <p
           style={{ margin: 0, color: COLORS.textoSecundario, lineHeight: 1.6 }}
         >
-          Escolha exatamente 6 dezenas em uma grade moderna inspirada no volante
-          oficial.
+          Escolha exatamente 6 dezenas da cartela.
         </p>
       </div>
 
@@ -110,28 +121,26 @@ function Cartela() {
           marginBottom: 20,
         }}
       >
-        {numeroSelecionado.length > 0 ? (
-          [...numeroSelecionado]
-            .sort((a, b) => a - b)
-            .map((numero) => (
-              <span
-                key={numero}
-                style={{
-                  minWidth: 46,
-                  height: 46,
-                  borderRadius: "50%",
-                  backgroundColor: COLORS.verde,
-                  color: COLORS.branco,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontWeight: 800,
-                  border: `2px solid ${COLORS.branco}`,
-                }}
-              >
-                {formatNumber(numero)}
-              </span>
-            ))
+        {selecionadosOrdenados.length > 0 ? (
+          selecionadosOrdenados.map((numero) => (
+            <span
+              key={numero}
+              style={{
+                minWidth: 46,
+                height: 46,
+                borderRadius: "50%",
+                backgroundColor: COLORS.verde,
+                color: COLORS.branco,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 800,
+                border: `2px solid ${COLORS.branco}`,
+              }}
+            >
+              {formatNumber(numero)}
+            </span>
+          ))
         ) : (
           <span style={{ color: COLORS.textoSecundario, fontSize: 14 }}>
             Nenhuma dezena selecionada ainda.
@@ -157,75 +166,89 @@ function Cartela() {
         </span>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-        {linhas.map((linha, index) => (
-          <div
-            key={`linha-${index}`}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(10, minmax(0, 1fr))",
-              gap: 10,
-            }}
-          >
-            {linha.map((num) => {
-              const selecionado = numeroSelecionado.includes(num);
+      <div
+        style={{
+          width: "100%",
+          overflowX: "auto",
+          paddingBottom: 6,
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, minWidth: 620 }}>
+          {LINHAS.map((linha, index) => (
+            <div
+              key={`linha-${index}`}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(10, minmax(48px, 1fr))",
+                gap: 10,
+              }}
+            >
+              {linha.map((num) => {
+                const selecionado = numeroSelecionado.includes(num);
 
-              return (
-                <button
-                  key={num}
-                  type="button"
-                  style={{
-                    aspectRatio: "1 / 1",
-                    width: "100%",
-                    minHeight: 48,
-                    borderRadius: 16,
-                    border: selecionado
-                      ? `2px solid ${COLORS.branco}`
-                      : `1px solid ${COLORS.borda}`,
-                    backgroundColor: selecionado
-                      ? COLORS.verde
-                      : "rgba(255,255,255,0.05)",
-                    color: COLORS.branco,
-                    fontWeight: 800,
-                    fontSize: 16,
-                    cursor: "pointer",
-                    transition:
-                      "transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease",
-                    boxShadow: selecionado
-                      ? "0 12px 20px rgba(2, 136, 103, 0.32)"
-                      : "none",
-                    fontFamily: FONT_FAMILY,
-                  }}
-                  onClick={() => handlerClique(num)}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                    if (!selecionado) {
-                      e.currentTarget.style.borderColor = COLORS.azul;
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = "translateY(0)";
-                    e.currentTarget.style.borderColor = selecionado
-                      ? COLORS.branco
-                      : COLORS.borda;
-                  }}
-                >
-                  {formatNumber(num)}
-                </button>
-              );
-            })}
-          </div>
-        ))}
+                return (
+                  <button
+                    key={num}
+                    type="button"
+                    style={{
+                      aspectRatio: "1 / 1",
+                      width: "100%",
+                      minHeight: 48,
+                      borderRadius: 16,
+                      border: selecionado
+                        ? `2px solid ${COLORS.branco}`
+                        : `1px solid ${COLORS.borda}`,
+                      backgroundColor: selecionado
+                        ? COLORS.verde
+                        : "rgba(255,255,255,0.05)",
+                      color: COLORS.branco,
+                      fontWeight: 800,
+                      fontSize: 16,
+                      cursor: "pointer",
+                      transition:
+                        "transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease",
+                      boxShadow: selecionado
+                        ? "0 12px 20px rgba(2, 136, 103, 0.32)"
+                        : "none",
+                      fontFamily: FONT_FAMILY,
+                    }}
+                    onClick={() => handlerClique(num)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "translateY(-2px)";
+                      if (!selecionado) {
+                        e.currentTarget.style.borderColor = COLORS.azul;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "translateY(0)";
+                      e.currentTarget.style.borderColor = selecionado
+                        ? COLORS.branco
+                        : COLORS.borda;
+                    }}
+                  >
+                    {formatNumber(num)}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div
-        style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 24 }}
+        style={{
+          display: "flex",
+          gap: 12,
+          flexWrap: "wrap",
+          marginTop: 24,
+        }}
       >
         <button
           type="button"
           onClick={() => salvarSelecao(numeroSelecionado)}
           disabled={numeroSelecionado.length !== 6}
           style={{
+            flex: "1 1 220px",
             backgroundColor:
               numeroSelecionado.length === 6
                 ? COLORS.verde
@@ -247,6 +270,7 @@ function Cartela() {
           type="button"
           onClick={() => setNumeroSelecionado([])}
           style={{
+            flex: "1 1 220px",
             backgroundColor: "transparent",
             color: COLORS.branco,
             border: `1px solid ${COLORS.borda}`,

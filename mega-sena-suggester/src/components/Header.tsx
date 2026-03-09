@@ -88,7 +88,7 @@ function Header() {
           />
           <div style={{ display: "flex", flexDirection: "column" }}>
             <strong style={{ fontSize: 18, fontWeight: 900 }}>
-              Mega Suggester
+              Mega Palpites
             </strong>
             <span
               style={{

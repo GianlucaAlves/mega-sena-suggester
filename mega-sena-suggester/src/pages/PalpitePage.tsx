@@ -119,26 +119,27 @@ function PalpitePage() {
               maxWidth: 760,
             }}
           >
-            Aqui você escolhe o fluxo: pedir uma sugestão aleatória ou
-            selecionar manualmente 6 dezenas em um volante moderno inspirado na
-            Mega-Sena.
+            Aqui você pode escolher: pedir uma sugestão aleatória ou
+            selecionar manualmente 6 dezenas na nossa cartela.
           </p>
         </section>
 
         <section
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(min(100%, 320px), 1fr))",
             gap: 20,
             alignItems: "start",
           }}
         >
           <div
             style={{
+              width: "100%",
               backgroundColor: COLORS.painel,
               border: `1px solid ${COLORS.borda}`,
               borderRadius: 28,
-              padding: 24,
+              padding: "clamp(18px, 4vw, 24px)",
               boxShadow: "0 20px 48px rgba(0,0,0,0.28)",
               display: "flex",
               flexDirection: "column",
@@ -223,7 +224,7 @@ function PalpitePage() {
                   <div
                     style={{
                       display: "grid",
-                      gridTemplateColumns: "repeat(3, 52px)",
+                      gridTemplateColumns: "repeat(3, minmax(44px, 52px))",
                       justifyContent: "center",
                       gap: 12,
                     }}

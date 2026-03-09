@@ -7,7 +7,7 @@ import Header from "./components/Header";
 
 function App() {
   return (
-    <div>
+    <div style={{ minHeight: "100vh", backgroundColor: "#050505" }}>
       <Header />
       <main style={{ paddingTop: 94 }}>
         <Routes>
