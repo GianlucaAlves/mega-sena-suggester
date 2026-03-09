@@ -1,6 +1,7 @@
-import {useContext, useEffect, useState} from 'react'
+import {useContext, useState} from 'react'
 import {PalpitesContext} from '../context/PalpitesContext';
 import type {Palpite} from '../types/Palpite'
+import Cartela from '../components/Cartela';
 
 
 function PalpitePage(){
@@ -34,14 +35,13 @@ function PalpitePage(){
         setPalpite(novoPalpite)
         contexto.adicionarPalpite(novoPalpite);
     }
-    useEffect(() => {
-    gerarPalpite();
-    }, []);
+  
     return (
-        <>
+        <div>
+            <Cartela />
             <div>{palpite?.numeros.join(', ')}</div>
             <button onClick={gerarPalpite}>Nova sugestão</button>
-        </>
+        </div>
     );
 }
 
