@@ -68,7 +68,6 @@ function Cartela() {
     <section
       style={{
         width: "100%",
-        minWidth: 0,
         backgroundColor: COLORS.painel,
         border: `1px solid ${COLORS.borda}`,
         borderRadius: 28,
@@ -101,25 +100,16 @@ function Cartela() {
           style={{
             margin: 0,
             color: COLORS.branco,
-            WebkitOverflowScrolling: "touch",
-            scrollbarWidth: "thin",
             fontSize: 30,
             fontWeight: 900,
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-              minWidth: 540,
-            }}
-          >
+          }}
         >
           Cartela da Mega-Sena
         </h2>
         <p
           style={{ margin: 0, color: COLORS.textoSecundario, lineHeight: 1.6 }}
-                  gridTemplateColumns: "repeat(10, minmax(44px, 1fr))",
-                  gap: 8,
+        >
+          Escolha exatamente 6 dezenas da cartela.
         </p>
       </div>
 
@@ -210,8 +200,8 @@ function Cartela() {
                     style={{
                       aspectRatio: "1 / 1",
                       width: "100%",
-                      minHeight: 44,
-                      borderRadius: 14,
+                      minHeight: 48,
+                      borderRadius: 16,
                       border: selecionado
                         ? `2px solid ${COLORS.branco}`
                         : `1px solid ${COLORS.borda}`,
@@ -220,7 +210,7 @@ function Cartela() {
                         : "rgba(255,255,255,0.05)",
                       color: COLORS.branco,
                       fontWeight: 800,
-                      fontSize: 15,
+                      fontSize: 16,
                       cursor: "pointer",
                       transition:
                         "transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease",
@@ -273,12 +263,11 @@ function Cartela() {
             color: COLORS.branco,
             border: "none",
             borderRadius: 14,
-            padding: "14px 18px",
+            padding: "14px 20px",
             fontWeight: 800,
             fontSize: 15,
             cursor: numeroSelecionado.length === 6 ? "pointer" : "not-allowed",
             fontFamily: FONT_FAMILY,
-            minWidth: 0,
           }}
         >
           Salvar seleção manual
@@ -293,12 +282,11 @@ function Cartela() {
             color: COLORS.branco,
             border: `1px solid ${COLORS.borda}`,
             borderRadius: 14,
-            padding: "14px 18px",
+            padding: "14px 20px",
             fontWeight: 800,
             fontSize: 15,
             cursor: "pointer",
             fontFamily: FONT_FAMILY,
-            minWidth: 0,
           }}
         >
           Limpar seleção
