@@ -82,7 +82,9 @@ function Roleta() {
   const ballSize = Math.max(18, Math.min(24, circleSize * 0.08));
   const radius = (circleSize - ballSize) / 2;
   const center = circleSize / 2;
-  const [bolas, setBolas] = useState<Bola[]>(() => createBolas(getCircleSize()));
+  const [bolas, setBolas] = useState<Bola[]>(() =>
+    createBolas(getCircleSize()),
+  );
   const [girando, setGirando] = useState(false);
   const [sorteadas, setSorteadas] = useState<number[]>([]);
   const [historicoSorteios, setHistoricoSorteios] = useState<Sorteio[]>(() => {
