@@ -1,6 +1,7 @@
 import {useState, useContext} from 'react';
 import {PalpitesContext} from '../context/PalpitesContext';
 import type {Palpite} from '../types/Palpite';
+import {v4 as uuidv4} from 'uuid';
 
 function Cartela(){
     const [numeroSelecionado, setNumeroSelecionado] = useState<number[]>([]);
@@ -21,7 +22,7 @@ function Cartela(){
 
     const salvarSelecao = (selecionados: number[]) => {
         const novoPalpite: Palpite = {
-            id : Date.now().toString(),
+            id : uuidv4(),
             tipo: 'manual',
             numeros: selecionados,
             data: new Date().toISOString()

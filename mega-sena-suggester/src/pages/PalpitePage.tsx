@@ -2,6 +2,7 @@ import {useContext, useState} from 'react'
 import {PalpitesContext} from '../context/PalpitesContext';
 import type {Palpite} from '../types/Palpite'
 import Cartela from '../components/Cartela';
+import {v4 as uuidv4} from 'uuid';
 
 
 function PalpitePage(){
@@ -10,7 +11,7 @@ function PalpitePage(){
 
     function gerarPalpite(){
         const num = new Set<number>();
-        const id = Date.now().toString();
+        const id = uuidv4();
         const tipo = 'automatico';
         const data = new Date().toISOString();
         

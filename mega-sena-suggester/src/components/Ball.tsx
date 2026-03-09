@@ -1,5 +1,6 @@
 type BallProps = {
     num: number
+    style?: React.CSSProperties
 }
 
 function Ball(props: BallProps){
@@ -13,7 +14,8 @@ function Ball(props: BallProps){
             height: "40px",
             width: "40px",
             margin: "3px",
-            backgroundColor: "#028867"
+            backgroundColor: "#028867",
+            ...props.style
         }}>
             <p style={{
                 color: "#ffffff"
